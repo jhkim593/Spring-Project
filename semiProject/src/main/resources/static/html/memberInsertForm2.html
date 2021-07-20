@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link  href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+ <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="js/index.js"></script>
+  
+  <script src="js/login.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
+<script type="text/javascript">
+	$(document).ready(function(){
+		
+		$('#idChk').click(function(){
+			let id=$('#id').val();
+			
+				$.post("/checkId",
+					  {
+					    
+					    id: id,
+					    
+					  },
+					  function(data){
+					  data=JSON.parse(data);
+					  if(data.ch==0){
+						alert("사용가능한 아이디입니다.");
+						$("#idChk").attr("value", "Y");
+						}
+						else{
+							alert("이미 사용중인 아이디입니다.");
+							return false;
+						}
+					    
+					  });
+			
+		});
+		
+	
+		$('#join').click(function(){
+			
+			
+			 if ($("#id").val()==""){
+			alert("아이디를 입력해주세요");
+			$("#id").focus();
+			return false;
+		  }
+			else if ($("#name").val()==""){
+			alert("이름을 입력해주세요");
+			$("#name").focus();
+			return false;
+		  }
+		 
+		   else if ($("#pw").val()==""){
+			alert("패스워드를 입력해주세요");
+			$("#pw").focus();
+			return false;
+		  }
+		  
+		  var idChkVal = $("#idChk").val();
+				if(idChkVal == "N"){
+					alert("중복확인 버튼을 눌러주세요.");
+					return false;
+				}
+		  
+		  
+			const name=$('#name').val();
+			const id=$('#id').val();
+			const pw=$('#pw').val();
+			//alert(name+":"+id+":"+pw);
+			//console.log(opener.document.getElementById("welcomeMsg"));
+			//opener.document.getElementById("welcomeMsg").textContent=name+"님 환영합니다";
+			//window.close();
+			//jquery-ajax
+		/* 	$.get('../main?name='+name+"&id="+id+"&pw="+pw,function(data,status){
+				alert("data:"+data+"\nStatus:"+status);
+				window.close();
+			}); */
+			//window.close(); ajax와 다르게 흘러간다
+			
+			$.post("../memberInsert",
+					  {
+					    name: name,
+					    id: id,
+					    pw:pw
+					  },
+					  function(data, status){
+					    alert(data);
+					    window.close();
+					  });
+            
+			
+		});
+	});
+
+</script>
+</head>
+<body>
+	<div class="form-group">
+      <label for="exampleInputEmail1">ID</label>
+      <input type="text" id="id" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter ID">
+      <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+    <button class="idChk" type="button" id="idChk" " value="N">중복확인</button>
+
+    
+    
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" id="pw" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+    
+    <div class="form-group">
+      <label for="exampleInputEmail1">NAME</label>
+      <input type="text" id="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter NAME">
+      <small id="emailHelp" class="form-text text-muted"></small>
+    </div>
+	<button id="join">회원가입</button>
+</body>
+</html>

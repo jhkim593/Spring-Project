@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+   
+   <mapper namespace="com.myboot01.web.dao.ReplyDAO">
+    
+      <resultMap id="replyResult" type="ReplyVO">
+      <result property="bno" column="bno" />
+      <result property="rno" column="rno" />
+      <result property="content" column="content" />
+      <result property="writer" column="writer" />
+      <result property="writeDate" column="writeDate" />
+      <result property="parentNo" column="parentNo" />
+      <result property="level" column="level"  />
+   </resultMap> 
+ 
+ 
+   <select id="selectAllReply"  parameterType="String" resultMap="replyResult">
+      <![CDATA[
+        select level,bno,rno,content,writer,parentno,writeDate from reply where bno=#{bno} 	
+        start with parentNO=0 connect by prior rno=PARENTNO   ORDER SIBLINGS by rno desc
+      ]]>
+   </select>
+   
+   
+   
+   <select id="selectNextRno" resultType="String" >
+      <![CDATA[
+        select max(rno) from reply	
+      ]]>
+   </select>
+
+   
+	
+   
+   <update id="updateReply"  parameterType="ReplyVO">
+     <![CDATA[
+	     update reply
+	     set  content=#{content}
+	     where
+	     rno=#{rno}
+      ]]>      
+   </update> 
+     
+   <delete id="deleteReply"  parameterType="String">
+	<![CDATA[
+	   delete from  reply
+	   where
+	   rno=#{rno}
+	]]>      
+  </delete>
+ 
+
+
+     
+     <insert id="insertReply" parameterType="ReplyVO">
+     
+       <![CDATA[
+          insert into reply values(#{bno},#{rno},#{content},#{writer},SYSDATE,0)
+       ]]>
+     </insert>
+   
+   </mapper>
